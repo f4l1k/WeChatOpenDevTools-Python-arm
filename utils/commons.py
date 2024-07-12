@@ -40,3 +40,13 @@ class Commons:
         else:
             self.wechatutils_instance.print_process_not_found_message()
 
+    def load_wechatEx_configs_pid(self,pid):
+        path = self.wechatutils_instance.get_configs_path()
+        version = self.wechatutils_instance.get_wechat_version_mac()
+        if pid or version is not None:
+            wehcatEx_hookcode = open(path + "../scripts/hook.js", "r", encoding="utf-8").read()
+            wechatEx_addresses = open(path + "../configs/address_{}_arm.json".format(version)).read()
+            wehcatEx_hookcode = "var address=" + wechatEx_addresses + wehcatEx_hookcode
+            self.inject_wehcatEx(pid, wehcatEx_hookcode)
+        else:
+            self.wechatutils_instance.print_process_not_found_message()

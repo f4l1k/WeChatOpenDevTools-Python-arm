@@ -82,3 +82,10 @@ class WechatUtils:
         except subprocess.CalledProcessError as e:
             return e.stderr
 
+    def get_wechat_version_mac(self):
+        try:
+            version_command = "ps aux | grep 'WeChatAppEx' |  grep -v 'grep' | grep ' --client_version' | grep '-user-agent=' | grep -oE 'MacWechat/([0-9]+\.)+[0-9]+\(0x\d+\)' |  grep -oE '(0x\d+)' | sed 's/0x//g' | head -n 1"
+            version  = subprocess.run(version_command, shell=True, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.replace("\n","")
+            return version
+        except subprocess.CalledProcessError as e:
+            return e.stderr
