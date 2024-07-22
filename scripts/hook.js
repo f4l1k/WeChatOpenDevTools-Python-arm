@@ -47,5 +47,11 @@ setImmediate(() => {
             }
         }
     })
+    Interceptor.attach(base.add(address.xwebadress), { // json_get_bool
+        onLeave(retval) {
+                // console.log("[+] enable_vconsole detected, replace retval to true")
+            retval.replace(1)
+        }
+    }) 
 })
 
