@@ -24,6 +24,7 @@ def main():
         commons.load_wechatEx_configs_pid(args.pid)
     else:
         commons.load_wechatEx_configs()
+        
 
 if __name__ == "__main__":
     generate_banner()
