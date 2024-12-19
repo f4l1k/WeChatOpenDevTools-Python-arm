@@ -40,5 +40,11 @@ python main.py
 ---
 
 ### 常见问题
+未适配版本，按下述方法ida自行添加，记得做了新地址帮作者补充下😊
+1、ida打开/Applications/WeChat.app/Contents/MacOS/WeChatAppEx.app/Contents/Frameworks/WeChatAppEx Framework.framework/Versions/C/WeChatAppEx Framework；注意选择arm架构打开
+2、JsonGetBoolFunc：搜索字符串“enable_vconsole”，找到交叉引用，找到“if ( sub_25F4C88((__int64)v53, "enable_vconsole", 0LL) & 1 )”中的sub_25F4C88地址
+3、DevToolStringAddr：搜索字符串“closeNetLog”，下面的devTools就只要找的地址
+4、WechatWebStringAddr：搜索字符串“https://applet-debug.com/devtools/wechat_app.html”
+5、xwebadress地址：搜索字符串“xweb-enable-inspect”
 
 
