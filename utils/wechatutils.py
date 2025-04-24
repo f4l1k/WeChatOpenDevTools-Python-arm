@@ -3,6 +3,7 @@ import psutil,subprocess
 from utils.colors import Color
 
 class WechatUtils:
+    version_command = "ps aux | grep 'WeChatAppEx' |  grep -v 'grep' | grep ' --client_version' | grep '-user-agent=' | grep -oE 'MacWechat/[0-9]+\.[0-9]+\.[0-9]+\(0x[0-9a-f]+\)' |  grep -oE '0x[0-9a-f]+' | sed 's/0x//g' | head -n 1"
     def __init__(self):
         self.configs_path = self.get_configs_path()
         self.version_list = self.get_version_list()
@@ -23,7 +24,7 @@ class WechatUtils:
     def get_version_list(self):
         configs_path = self.configs_path
         version_list = os.listdir(configs_path)
-        versions_list = [int(file.split('_')[1]) for file in version_list if file.startswith('address_')]
+        versions_list = [file.split('_')[1] for file in version_list if file.startswith('address_')]
         return versions_list
 
     def is_wechatEx_process(self, cmdline):
@@ -75,17 +76,18 @@ class WechatUtils:
     def get_wechat_pid_and_version_mac(self):
         try:
             pid_command="ps aux | grep 'WeChatAppEx' |  grep -v 'grep' | grep ' --client_version' | grep '-user-agent=' | awk '{print $2}' | tail -n 1"
-            version_command = "ps aux | grep 'WeChatAppEx' |  grep -v 'grep' | grep ' --client_version' | grep '-user-agent=' | grep -oE 'MacWechat/([0-9]+\.)+[0-9]+\(0x\d+\)' |  grep -oE '(0x\d+)' | sed 's/0x//g' | head -n 1"
             pid  = subprocess.run(pid_command, shell=True, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.replace("\n","")
-            version  = subprocess.run(version_command, shell=True, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.replace("\n","")
+            print(Color.GREEN + f"[+] 查找到微信的pid是：{pid}" + Color.END)
+            version  = subprocess.run(self.version_command, shell=True, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.replace("\n","")
+            print(Color.GREEN + f"[+] 查找到微信的版本是：{version}" + Color.END)
             return int(pid),version
         except subprocess.CalledProcessError as e:
             return e.stderr
 
     def get_wechat_version_mac(self):
         try:
-            version_command = "ps aux | grep 'WeChatAppEx' |  grep -v 'grep' | grep ' --client_version' | grep '-user-agent=' | grep -oE 'MacWechat/([0-9]+\.)+[0-9]+\(0x\d+\)' |  grep -oE '(0x\d+)' | sed 's/0x//g' | head -n 1"
-            version  = subprocess.run(version_command, shell=True, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.replace("\n","")
+            version  = subprocess.run(self.version_command, shell=True, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.replace("\n","")
+            print(Color.GREEN + f"[+] 查找到微信的版本是：{version}" + Color.END)
             return version
         except subprocess.CalledProcessError as e:
             return e.stderr
